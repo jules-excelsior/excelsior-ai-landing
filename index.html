@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Chat Widget for Your Website | Excelsior Consultancy Services</title>
+<meta name="description" content="We install a custom AI assistant on your website that captures leads and answers questions 24/7. Done in 14 days or your money back.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- hCaptcha -->
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0d1117;
+    --navy-mid: #161c26;
+    --navy-light: #1e2535;
+    --gold: #b8975a;
+    --gold-light: #d4b47a;
+    --gold-pale: #f0e6d0;
+    --white: #ffffff;
+    --off-white: #f7f4ef;
+    --muted: rgba(255,255,255,0.55);
+    --border: rgba(184,151,90,0.2);
+    --border-light: rgba(184,151,90,0.12);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.25rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(13,17,23,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-weight: 500; letter-spacing: 0.06em;
+    color: var(--gold); text-decoration: none;
+  }
+  .nav-logo span { color: var(--white); font-weight: 300; }
+  .nav-cta {
+    font-family: 'Jost', sans-serif; font-size: 0.75rem;
+    font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    border: 1px solid var(--gold); padding: 0.5rem 1.25rem;
+    transition: all 0.3s ease;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--navy); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem 2rem 5rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 50%, rgba(184,151,90,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 10% 80%, rgba(184,151,90,0.04) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 0; opacity: 0.03;
+    background-image: linear-gradient(var(--gold) 1px, transparent 1px),
+      linear-gradient(90deg, var(--gold) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-inner { position: relative; z-index: 1; max-width: 780px; }
+  .hero-eyebrow {
+    font-family: 'Jost', sans-serif; font-size: 0.7rem;
+    font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block; width: 32px; height: 1px; background: var(--gold);
+  }
+  .hero-h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 300; line-height: 1.08; letter-spacing: -0.01em;
+    color: var(--white); margin-bottom: 1.5rem;
+  }
+  .hero-h1 em {
+    font-style: italic; color: var(--gold);
+  }
+  .hero-sub {
+    font-size: 1rem; font-weight: 300; color: var(--muted);
+    max-width: 520px; line-height: 1.8; margin-bottom: 2.5rem;
+  }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+  .btn-primary {
+    font-family: 'Jost', sans-serif; font-size: 0.78rem;
+    font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--gold); color: var(--navy);
+    padding: 1rem 2.5rem; text-decoration: none;
+    transition: all 0.3s ease; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-ghost {
+    font-family: 'Jost', sans-serif; font-size: 0.78rem;
+    font-weight: 400; letter-spacing: 0.08em;
+    color: var(--muted); text-decoration: none;
+    display: flex; align-items: center; gap: 0.5rem;
+    transition: color 0.2s;
+  }
+  .btn-ghost:hover { color: var(--white); }
+  .btn-ghost svg { width: 16px; height: 16px; }
+
+  .hero-proof {
+    margin-top: 4rem; padding-top: 2rem;
+    border-top: 1px solid var(--border-light);
+    display: flex; flex-wrap: wrap; gap: 2rem; align-items: center;
+  }
+  .proof-stat { text-align: left; }
+  .proof-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 300; color: var(--gold); line-height: 1;
+  }
+  .proof-label { font-size: 0.72rem; letter-spacing: 0.1em; color: var(--muted); margin-top: 4px; }
+  .proof-divider { width: 1px; height: 40px; background: var(--border); }
+
+  /* PAIN */
+  .pain-section {
+    padding: 6rem 2rem;
+    border-top: 1px solid var(--border-light);
+    background: var(--navy-mid);
+  }
+  .section-inner { max-width: 900px; margin: 0 auto; }
+  .section-tag {
+    font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1rem;
+  }
+  .section-h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 300; line-height: 1.15; color: var(--white);
+    margin-bottom: 3rem;
+  }
+  .section-h2 em { font-style: italic; color: var(--gold); }
+
+  .pain-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1px; background: var(--border-light);
+    border: 1px solid var(--border-light);
+  }
+  .pain-card {
+    background: var(--navy); padding: 2rem;
+    position: relative; overflow: hidden;
+  }
+  .pain-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: transparent; transition: background 0.3s;
+  }
+  .pain-card:hover::before { background: var(--gold); }
+  .pain-icon {
+    font-size: 1.5rem; margin-bottom: 1rem;
+    color: rgba(184,151,90,0.4);
+  }
+  .pain-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem; font-weight: 400; color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+  .pain-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
+
+  /* HOW IT WORKS */
+  .how-section { padding: 6rem 2rem; }
+  .steps { margin-top: 3rem; position: relative; }
+  .step {
+    display: grid; grid-template-columns: 80px 1fr; gap: 2rem;
+    padding: 2rem 0; border-bottom: 1px solid var(--border-light);
+    align-items: start;
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem; font-weight: 300; color: var(--border);
+    line-height: 1; padding-top: 0.2rem;
+    transition: color 0.3s;
+  }
+  .step:hover .step-num { color: var(--gold); }
+  .step-day {
+    font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.5rem;
+  }
+  .step h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-weight: 400; color: var(--white);
+    margin-bottom: 0.4rem;
+  }
+  .step p { font-size: 0.875rem; color: var(--muted); }
+
+  /* PRICING */
+  .pricing-section {
+    padding: 6rem 2rem;
+    background: var(--navy-mid);
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem; margin-top: 3rem;
+  }
+  .pricing-card {
+    border: 1px solid var(--border);
+    padding: 2rem;
+    position: relative; transition: border-color 0.3s;
+    background: var(--navy);
+  }
+  .pricing-card:hover { border-color: rgba(184,151,90,0.5); }
+  .pricing-card.featured {
+    border-color: var(--gold);
+    background: var(--navy-light);
+  }
+  .featured-badge {
+    position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+    background: var(--gold); color: var(--navy);
+    font-size: 0.65rem; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; padding: 4px 16px;
+  }
+  .tier-name {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1rem;
+  }
+  .tier-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; font-weight: 300; color: var(--white);
+    line-height: 1; margin-bottom: 0.25rem;
+  }
+  .tier-price sup { font-size: 1.2rem; vertical-align: super; }
+  .tier-retainer {
+    font-size: 0.8rem; color: var(--muted); margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-light);
+  }
+  .tier-features { list-style: none; margin-bottom: 2rem; }
+  .tier-features li {
+    font-size: 0.85rem; color: var(--muted);
+    padding: 0.4rem 0; display: flex; align-items: flex-start; gap: 0.6rem;
+  }
+  .tier-features li::before {
+    content: '—'; color: var(--gold); flex-shrink: 0; margin-top: 1px;
+  }
+  .tier-cta {
+    display: block; text-align: center;
+    font-family: 'Jost', sans-serif; font-size: 0.75rem;
+    font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); border: 1px solid var(--gold);
+    padding: 0.75rem; text-decoration: none; transition: all 0.3s;
+  }
+  .tier-cta:hover, .pricing-card.featured .tier-cta {
+    background: var(--gold); color: var(--navy);
+  }
+
+  /* GUARANTEE */
+  .guarantee-section { padding: 5rem 2rem; text-align: center; }
+  .guarantee-inner {
+    max-width: 640px; margin: 0 auto;
+    border: 1px solid var(--border);
+    padding: 3rem;
+    position: relative;
+  }
+  .guarantee-inner::before, .guarantee-inner::after {
+    content: ''; position: absolute;
+    width: 24px; height: 24px;
+    border-color: var(--gold); border-style: solid;
+  }
+  .guarantee-inner::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .guarantee-inner::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+  .guarantee-icon {
+    font-size: 2.5rem; color: var(--gold); margin-bottom: 1rem;
+  }
+  .guarantee-inner h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 300; margin-bottom: 1rem;
+  }
+  .guarantee-inner p { font-size: 0.9rem; color: var(--muted); line-height: 1.8; }
+
+  /* WHO IS THIS FOR */
+  .for-section { padding: 6rem 2rem; background: var(--navy-mid); }
+  .for-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem; margin-top: 3rem;
+  }
+  .for-item {
+    padding: 1.5rem; border: 1px solid var(--border-light);
+    text-align: center; transition: border-color 0.3s;
+  }
+  .for-item:hover { border-color: var(--gold); }
+  .for-item .for-icon { font-size: 1.6rem; color: var(--gold); margin-bottom: 0.75rem; }
+  .for-item p { font-size: 0.82rem; color: var(--muted); }
+
+  /* CTA */
+  .cta-section {
+    padding: 7rem 2rem;
+    position: relative; overflow: hidden;
+    text-align: center;
+  }
+  .cta-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(184,151,90,0.06) 0%, transparent 70%);
+  }
+  .cta-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+  .cta-inner h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 300; line-height: 1.1; margin-bottom: 1rem;
+  }
+  .cta-inner h2 em { font-style: italic; color: var(--gold); }
+  .cta-inner p { font-size: 0.95rem; color: var(--muted); margin-bottom: 2.5rem; }
+
+  /* FORM */
+  .form-wrap {
+    background: var(--navy-light); border: 1px solid var(--border);
+    padding: 2.5rem; text-align: left; margin-top: 2rem;
+  }
+  .form-row { margin-bottom: 1.25rem; }
+  .form-row label {
+    display: block; font-size: 0.7rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem;
+  }
+  .form-row input, .form-row select, .form-row textarea {
+    width: 100%; background: var(--navy);
+    border: 1px solid var(--border); color: var(--white);
+    padding: 0.75rem 1rem; font-family: 'Jost', sans-serif;
+    font-size: 0.9rem; font-weight: 300;
+    outline: none; transition: border-color 0.2s;
+    appearance: none;
+  }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+    border-color: var(--gold);
+  }
+  .form-row select option { background: var(--navy); }
+  .form-submit {
+    width: 100%; background: var(--gold); color: var(--navy);
+    border: none; padding: 1rem;
+    font-family: 'Jost', sans-serif; font-size: 0.8rem;
+    font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    cursor: pointer; transition: background 0.3s;
+    margin-top: 0.5rem;
+  }
+  .form-submit:hover { background: var(--gold-light); }
+  .form-note { font-size: 0.75rem; color: var(--muted); margin-top: 1rem; text-align: center; }
+  .h-captcha { margin: 1rem 0 0.5rem; }
+  .form-error { font-size: 0.75rem; color: #e05c5c; margin-top: 0.4rem; display: none; }
+  .form-row input.error, .form-row select.error, .form-row textarea.error {
+    border-color: #e05c5c;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem; border-top: 1px solid var(--border-light);
+    display: flex; flex-wrap: wrap; gap: 1rem;
+    justify-content: space-between; align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem; color: var(--gold); letter-spacing: 0.06em;
+  }
+  .footer-copy { font-size: 0.75rem; color: var(--muted); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { opacity: 0; animation: fadeUp 0.8s ease forwards; }
+  .delay-1 { animation-delay: 0.15s; }
+  .delay-2 { animation-delay: 0.3s; }
+  .delay-3 { animation-delay: 0.45s; }
+  .delay-4 { animation-delay: 0.6s; }
+
+  /* WIDGET DEMO BADGE */
+  .demo-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(184,151,90,0.1); border: 1px solid var(--border);
+    padding: 0.5rem 1rem; font-size: 0.78rem; color: var(--gold-light);
+    margin-bottom: 2rem;
+  }
+  .demo-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    nav { padding: 1rem 1.25rem; }
+    .hero { padding: 7rem 1.25rem 4rem; }
+    .pain-section, .how-section, .pricing-section,
+    .guarantee-section, .for-section, .cta-section { padding: 4rem 1.25rem; }
+    .step { grid-template-columns: 50px 1fr; gap: 1rem; }
+    .step-num { font-size: 2.5rem; }
+    .guarantee-inner { padding: 2rem 1.25rem; }
+    .form-wrap { padding: 1.5rem; }
+    .proof-divider { display: none; }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://excelsior-consultancy.com" class="nav-logo">Excelsior <span>Consultancy</span></a>
+  <a href="#book" class="nav-cta">Book a Free Call</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow fade-up">AI Solutions for SMEs</div>
+    <h1 class="hero-h1 fade-up delay-1">
+      Your website is<br>losing leads <em>every night</em><br>while you sleep.
+    </h1>
+    <p class="hero-sub fade-up delay-2">
+      We install a custom AI chat assistant on your website that answers questions, captures leads, and follows up — 24/7, on-brand, fully done for you. Live in 14 days or your money back.
+    </p>
+    <div class="hero-actions fade-up delay-3">
+      <a href="#book" class="btn-primary">Get Your AI Widget →</a>
+      <a href="#how" class="btn-ghost">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        See how it works
+      </a>
+    </div>
+    <div class="hero-proof fade-up delay-4">
+      <div class="proof-stat">
+        <div class="proof-num">24/7</div>
+        <div class="proof-label">Lead capture</div>
+      </div>
+      <div class="proof-divider"></div>
+      <div class="proof-stat">
+        <div class="proof-num">14</div>
+        <div class="proof-label">Day delivery</div>
+      </div>
+      <div class="proof-divider"></div>
+      <div class="proof-stat">
+        <div class="proof-num">0</div>
+        <div class="proof-label">Staff hours needed</div>
+      </div>
+      <div class="proof-divider"></div>
+      <div class="proof-stat">
+        <div class="proof-num">$0</div>
+        <div class="proof-label">Risk — money back guarantee</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAIN POINTS -->
+<section class="pain-section">
+  <div class="section-inner">
+    <p class="section-tag">The problem</p>
+    <h2 class="section-h2">Your website works 9–5.<br><em>Your competition doesn't.</em></h2>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-icon">◌</div>
+        <h3>Leads disappear at 2am</h3>
+        <p>Visitors land on your site after hours, get no response, and go straight to your competitor who has a bot ready.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">◌</div>
+        <h3>Staff answer the same questions</h3>
+        <p>"What are your rates?" "Do you serve my area?" Your team wastes hours on questions an AI could handle in seconds.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">◌</div>
+        <h3>No system for capturing leads</h3>
+        <p>Visitors leave without a name, email, or phone number. You have no way to follow up. Revenue walks out the door.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="section-inner">
+    <p class="section-tag">The process</p>
+    <h2 class="section-h2">From zero to live<br><em>in 14 days.</em></h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div>
+          <p class="step-day">Day 1</p>
+          <h3>Discovery Call</h3>
+          <p>We learn your business, your customers, and the 20 questions your website gets asked most. No homework required on your end.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div>
+          <p class="step-day">Day 3</p>
+          <h3>AI Training</h3>
+          <p>We train your AI assistant on your services, pricing, tone, and FAQs. It speaks in your brand voice — not a generic bot script.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div>
+          <p class="step-day">Day 7</p>
+          <h3>Staging Preview</h3>
+          <p>You see a live working version before anything goes on your site. Test it, ask it questions, request changes — it's your widget.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div>
+          <p class="step-day">Day 10</p>
+          <h3>Your Review</h3>
+          <p>We refine based on your feedback. Tone, responses, lead capture flow — all adjusted until you're satisfied.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">05</div>
+        <div>
+          <p class="step-day">Day 14</p>
+          <h3>Go Live</h3>
+          <p>One line of code added to your website. Your AI assistant is live, capturing leads while you focus on everything else.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="section-inner">
+    <p class="section-tag">Investment</p>
+    <h2 class="section-h2">One price. <em>No surprises.</em></h2>
+    <div class="pricing-grid">
+
+      <div class="pricing-card">
+        <p class="tier-name">Starter</p>
+        <div class="tier-price"><sup>$</sup>1,500</div>
+        <p class="tier-retainer">setup + $200/month</p>
+        <ul class="tier-features">
+          <li>AI widget installed on your website</li>
+          <li>FAQ training up to 30 questions</li>
+          <li>Lead capture + email notification</li>
+          <li>Mobile responsive</li>
+          <li>14-day delivery</li>
+        </ul>
+        <a href="#book" class="tier-cta">Get Started</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="featured-badge">Most Popular</div>
+        <p class="tier-name">Pro</p>
+        <div class="tier-price"><sup>$</sup>3,000</div>
+        <p class="tier-retainer">setup + $400/month</p>
+        <ul class="tier-features">
+          <li>Everything in Starter</li>
+          <li>Appointment booking integration</li>
+          <li>Lead scoring system</li>
+          <li>CRM / Zapier integration</li>
+          <li>Monthly performance report</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="#book" class="tier-cta">Get Started</a>
+      </div>
+
+      <div class="pricing-card">
+        <p class="tier-name">Enterprise</p>
+        <div class="tier-price"><sup>$</sup>6,000</div>
+        <p class="tier-retainer">setup + $800/month</p>
+        <ul class="tier-features">
+          <li>Everything in Pro</li>
+          <li>Multi-location support</li>
+          <li>Multi-language capability</li>
+          <li>Custom analytics dashboard</li>
+          <li>Quarterly strategy review</li>
+          <li>White-glove onboarding</li>
+        </ul>
+        <a href="#book" class="tier-cta">Get Started</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- GUARANTEE -->
+<section class="guarantee-section">
+  <div class="guarantee-inner">
+    <div class="guarantee-icon">◈</div>
+    <h2>14-Day Delivery Guarantee</h2>
+    <p>We commit to having your AI chat widget live on your website within 14 days of kickoff — or we refund your setup fee in full. No questions, no conditions, no fine print. We put our work where our word is.</p>
+  </div>
+</section>
+
+<!-- WHO IS IT FOR -->
+<section class="for-section">
+  <div class="section-inner">
+    <p class="section-tag">Who this is for</p>
+    <h2 class="section-h2">Built for service<br><em>businesses that are serious.</em></h2>
+    <div class="for-grid">
+      <div class="for-item">
+        <div class="for-icon">⊕</div>
+        <p>Law Firms</p>
+      </div>
+      <div class="for-item">
+        <div class="for-icon">⊕</div>
+        <p>Dental & Medical Clinics</p>
+      </div>
+      <div class="for-item">
+        <div class="for-icon">⊕</div>
+        <p>Real Estate Agencies</p>
+      </div>
+      <div class="for-item">
+        <div class="for-icon">⊕</div>
+        <p>HR & Consulting Firms</p>
+      </div>
+      <div class="for-item">
+        <div class="for-icon">⊕</div>
+        <p>Financial Advisors</p>
+      </div>
+      <div class="for-item">
+        <div class="for-icon">⊕</div>
+        <p>E-commerce & Retail</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / BOOK -->
+<section class="cta-section" id="book">
+  <div class="cta-bg"></div>
+  <div class="cta-inner">
+    <p class="section-tag" style="text-align:center;">Book a free call</p>
+    <h2><em>Let's install your AI</em><br>assistant this month.</h2>
+    <p>15 minutes. No pitch. We'll show you exactly what your widget will look like and what it will say — before you spend a cent.</p>
+    <div class="form-wrap">
+      <!-- Honeypot — do not remove, traps bots -->
+      <div style="display:none" aria-hidden="true">
+        <input type="text" name="honeypot" id="honeypot" tabindex="-1" autocomplete="off">
+      </div>
+
+      <div class="form-row">
+        <label>Your Name</label>
+        <input type="text" id="f-name" placeholder="Jane Smith">
+        <p class="form-error" id="err-name">Please enter your full name.</p>
+      </div>
+      <div class="form-row">
+        <label>Business Email</label>
+        <input type="email" id="f-email" placeholder="jane@yourbusiness.com">
+        <p class="form-error" id="err-email">Please enter a valid business email address.</p>
+      </div>
+      <div class="form-row">
+        <label>Business Name</label>
+        <input type="text" id="f-biz" placeholder="Smith & Associates">
+        <p class="form-error" id="err-biz">Please enter your business name.</p>
+      </div>
+      <div class="form-row">
+        <label>Industry</label>
+        <select id="f-industry">
+          <option value="" disabled selected>Select your industry</option>
+          <option>Law Firm</option>
+          <option>Medical / Dental</option>
+          <option>Real Estate</option>
+          <option>HR / Consulting</option>
+          <option>Financial Services</option>
+          <option>E-commerce / Retail</option>
+          <option>Other</option>
+        </select>
+        <p class="form-error" id="err-industry">Please select your industry.</p>
+      </div>
+      <div class="form-row">
+        <label>Website URL</label>
+        <input type="url" id="f-url" placeholder="https://yourbusiness.com">
+        <p class="form-error" id="err-url">Please enter a valid website URL (https://...).</p>
+      </div>
+      <div class="form-row">
+        <label>What is your biggest website challenge?</label>
+        <textarea id="f-challenge" rows="3" placeholder="e.g. We get visitors but no one contacts us after hours..."></textarea>
+        <p class="form-error" id="err-challenge">Please describe your challenge (at least 20 characters).</p>
+      </div>
+
+      <!-- hCaptcha — dark theme matches brand -->
+      <div class="h-captcha"
+        data-sitekey="5af69458-8aec-4dfc-a0f2-0b507f9a004e"
+        data-theme="dark">
+      </div>
+      <p class="form-error" id="err-captcha">Please complete the security check.</p>
+
+      <button class="form-submit" id="submitBtn">Request My Free Call →</button>
+      <p class="form-note">We respond within 24 hours. No spam, no obligation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Excelsior Consultancy Services</div>
+  <div class="footer-copy">© 2025 Excelsior Consultancy Services. Talisay City, Cebu, Philippines.</div>
+</footer>
+
+<script>
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        entry.target.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.pain-card, .step, .pricing-card, .for-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    observer.observe(el);
+  });
+
+  // Form validation + spam protection
+  document.getElementById('submitBtn').addEventListener('click', function() {
+
+    let valid = true;
+
+    // Helper functions
+    function showError(id) {
+      document.getElementById(id).style.display = 'block';
+    }
+    function hideError(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+    function markError(el) {
+      el.classList.add('error');
+    }
+    function clearError(el) {
+      el.classList.remove('error');
+    }
+
+    // Layer 1 — Honeypot check
+    if (document.getElementById('honeypot').value !== '') {
+      // Bot detected — silent reject
+      return;
+    }
+
+    // Layer 2 — Name check
+    const name = document.getElementById('f-name');
+    if (name.value.trim().length < 2) {
+      showError('err-name'); markError(name); valid = false;
+    } else {
+      hideError('err-name'); clearError(name);
+    }
+
+    // Layer 3 — Email check (format + no free emails)
+    const email = document.getElementById('f-email');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const freeEmails = ['gmail.com','yahoo.com','hotmail.com','outlook.com','icloud.com','aol.com'];
+    const emailDomain = email.value.split('@')[1];
+    if (!emailRegex.test(email.value) || freeEmails.includes(emailDomain)) {
+      showError('err-email'); markError(email); valid = false;
+    } else {
+      hideError('err-email'); clearError(email);
+    }
+
+    // Layer 4 — Business name check
+    const biz = document.getElementById('f-biz');
+    if (biz.value.trim().length < 2) {
+      showError('err-biz'); markError(biz); valid = false;
+    } else {
+      hideError('err-biz'); clearError(biz);
+    }
+
+    // Layer 5 — Industry check
+    const industry = document.getElementById('f-industry');
+    if (!industry.value) {
+      showError('err-industry'); markError(industry); valid = false;
+    } else {
+      hideError('err-industry'); clearError(industry);
+    }
+
+    // Layer 6 — URL check
+    const url = document.getElementById('f-url');
+    if (!url.value.startsWith('http://') && !url.value.startsWith('https://')) {
+      showError('err-url'); markError(url); valid = false;
+    } else {
+      hideError('err-url'); clearError(url);
+    }
+
+    // Layer 7 — Qualifying question (min 20 chars)
+    const challenge = document.getElementById('f-challenge');
+    if (challenge.value.trim().length < 20) {
+      showError('err-challenge'); markError(challenge); valid = false;
+    } else {
+      hideError('err-challenge'); clearError(challenge);
+    }
+
+    // Layer 8 — hCaptcha check
+    const captchaResponse = hcaptcha.getResponse();
+    if (!captchaResponse) {
+      showError('err-captcha'); valid = false;
+    } else {
+      hideError('err-captcha');
+    }
+
+    // All passed — proceed
+    if (valid) {
+      // TODO: Replace with your Calendly link or form handler
+      // window.location.href = 'https://calendly.com/YOUR-LINK';
+      alert('Thank you! We will be in touch within 24 hours.');
+    }
+
+  });
+</script>
+
+</body>
+</html>
